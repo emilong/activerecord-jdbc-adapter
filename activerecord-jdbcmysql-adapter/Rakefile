@@ -1,3 +1,15 @@
 require 'bundler/gem_helper'
-Bundler::GemHelper.install_tasks
+
+namespace :mysql do
+  Bundler::GemHelper.install_tasks name: 'activerecord-jdbcmysql-adapter'
+end
+
+namespace :mariadb do
+  Bundler::GemHelper.install_tasks name: 'activerecord-jdbcmariadb-adapter'
+end
+
+[:build, :release, :install].each do |name|
+  task name => ["mysql:#{name}", "mariadb:#{name}"]
+end
+
 require File.expand_path '../../rakelib/bundler_ext', __FILE__
